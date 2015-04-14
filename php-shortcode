@@ -1,0 +1,68 @@
+// To add shortcode to make your file in to a template just create a .php template file with
+
+<?php
+get_header();
+?>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+<?php
+
+$listOrder = Array( "1", "2", "3", "4" );
+
+function answers_shortcode_handler( $atts, $content = null ) { 
+
+	global $listOrder;
+	shuffle($listOrder);
+
+	return '
+<div class="v-tab" style="margin-top:-50px;">
+<ul class="tab__head">
+  <li rel="tab1" style="font-size:14px;"><input id="radio-input-1" type="radio" value="myValue 1" name="radio-group"><label for="radio-input-1" class="input-helper input-helper--radio">
+    <p style="width:100%; margin-left: 30px;"><span style="font-size:130%">A) </span>'.$atts['a'.$listOrder[0]].'</p></label></li>
+  <li rel="tab2" style="font-size:14px;"><input id="radio-input-2" type="radio" value="myValue 2" name="radio-group"><label for="radio-input-2" class="input-helper input-helper--radio">
+    <p style="width:100%; margin-left: 30px;"><span style="font-size:130%">B) </span>'.$atts['a'.$listOrder[1]].'</p></label></li>
+  <li rel="tab3" style="font-size:14px;"><input id="radio-input-3" type="radio" value="myValue 3" name="radio-group"><label for="radio-input-3" class="input-helper input-helper--radio">
+    <p style="width:100%; margin-left: 30px;"><span style="font-size:130%">C) </span>'.$atts['a'.$listOrder[2]].'</p></label></li>
+  <li rel="tab4" style="font-size:14px;"><input id="radio-input-4" type="radio" value="myValue 4" name="radio-group"><label for="radio-input-4" class="input-helper input-helper--radio">
+    <p style="width:100%; margin-left: 30px;"><span style="font-size:130%">D) </span>'.$atts['a'.$listOrder[3]].'</p></label></li>
+</ul>' . do_shortcode($content) . ' '; } add_shortcode('answers', 'answers_shortcode_handler' );
+
+function explanations_shortcode_handler( $atts, $content = null ) { 
+
+    $answer = "You're Correct!"; 		//define variable answer to create your correct answer
+	global $listOrder;					//add array_search +1 to create a random list generator for each radio input
+	
+	$q1 = array_search("1", $listOrder)+1;
+	$q2 = array_search("2", $listOrder)+1;
+	$q3 = array_search("3", $listOrder)+1;
+	$q4 = array_search("4", $listOrder)+1;
+
+	return '
+<div class="tab__container">
+<div id="tab'.$q1.'" class="tab__content">
+<p style="color: green; font-size: 300%; margin-top: 30px; margin-bottom: -5px; margin-left: 150px;" >'.$answer.'</p> 		//alway make your answer e1 random list generator will place it diferently each time
+<p>'.$atts['e1'].'</p>
+</div>
+<div id="tab'.$q2.'" class="tab__content">
+<center><p style="font-size: 280%; margin-top: 30px; margin-bottom: -5px;" ><span style="color: red;">Sorry Try Again!</span> - See Explanstion Below</p></center>
+<p>'.$atts['e2'].'</p>
+</div>
+<div id="tab'.$q3.'" class="tab__content">
+<center><p style="font-size: 280%; margin-top: 30px; margin-bottom: -5px;" ><span style="color: red;">Sorry Try Again!</span> - See Explanstion Below</p></center>
+<p>'.$atts['e3'].'</p>
+</div>
+<div id="tab'.$q4.'" class="tab__content">
+<center><p style="font-size: 280%; margin-top: 30px; margin-bottom: -5px;" ><span style="color: red;">Sorry Try Again!</span> - See Explanstion Below</p></center>
+<p>'.$atts['e4'].'</p>
+</p>
+</p>
+</div>
+</div>
+</div>' . do_shortcode($content) . ' '; } add_shortcode('explanations', 'explanations_shortcode_handler' );
+?>
+
+
+// after adding your .php template your shortcode will then look like
+
+[answers a1='' a2='' a3='' a4=''][/answers]
+[explanations e1='' e2='' e3='' e4=''][/explanations]
